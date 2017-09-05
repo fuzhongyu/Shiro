@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
+	   default-lazy-init="true">
+
+<description>Spring-Shiro Configuration</description>
+
+
+	<!-- Define the realm you want to use to connect to your back-end security datasource: -->
+	<bean id="myRealm" class="com.fzy.modules.utils.UserAuthorRealm">
+	</bean>
+
+	<bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
+		<!-- Single realm app. If you have multiple realms, use the 'realms' property instead. -->
+		<property name="realm" ref="myRealm"/>
+	</bean>
+
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+	<!-- For simplest integration, so that all SecurityUtils.* methods work in all cases, -->
+	<!-- make the securityManager bean a static singleton. DO NOT do this in web -->
+	<!-- applications - see the 'Web Applications' section below instead.-->
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSercurityManager"/>
+		<property name="arguments" ref="securityManager"/>
+	</bean>
+
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"/>
+		<!--override these for application-specific URLs if you like:-->
+        <!--<property name="loginUrl" value="/login.jsp"/>-->
+        <!--<property name="successUrl" value="/home.jsp"/>-->
+        <!--<property name="unauthorizedUrl" value="/unauthorized.jsp"/>-->
+
+		<!-- The 'filters' property is not necessary since any declared javax.servlet.Filter bean --> <!-- defined will be automatically acquired and available via its beanName in chain --> <!-- definitions, but you can perform instance overrides or name aliases here if you like: -->
+		<!--<propery name="filters">-->
+			<!--<util:map>-->
+			<!--<entry key="anAlias" value-ref="someFilter"/>-->
+			<!--</util:map> -->
+		<!--</property>-->
+		<property name="filterChainDefinitions">
+			<value>
+				<!--some example chain definitions-->
+				/admin/** = authc, roles[admin]
+				/docs/** = authc, perms[document:read]
+				/** = authc
+			 <!--more URL-to-FilterChain definitions here-->
+			</value>
+		</property>
+	</bean>
+
+
+	<!--在独立应用程序和 Web 应用程序中，你可能想为安全检查使用 Shiro 的注释(例如，@RequiresRoles， @RequiresPermissions 等等)。-->
+	<!--这需要 Shiro 的 Spring AOP 集成来扫 合适的注解类以及执行必要的安全逻辑。只需添加这两个 bean 定义到 applicationContext.xml 中-->
+	<!-- Enable Shiro Annotations for Spring-configured beans. Only run after -->
+	<!-- the lifecycleBeanProcessor has run: -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"/>
+	</bean>
+
+	<!--当一个远程调用方法到达启用Shiro的服务器时，与该RPC调用关联的Subject在线程执行时必须绑定到访问的接收 线程。-->
+	<!--这是通过在 applicationContext.xml 中定义 SecureRemotInvocationExecutor bean 来完成的:-->
+	<!-- Secure Spring remoting: Ensure any Spring Remoting method invocations --> <!-- can be associated with a Subject for security checks. -->
+	<bean id="secureRemoteInvocationExecutor" class="org.apache.shiro.spring.remoting.SecureRemoteInvocationExecutor">
+		<property name="securityManager" ref="securityManager"/>
+	</bean>
+
+	<!--当你定义这个 bean 之后，你必须将其插入到任何你正在用来 export/expose 你服务的远程 Exporter。-->
+	<!--Exporter 实现 是根据使用的远程处理机制/协议来定义的。请参阅 Sping 的 Remoting 章节关于定义 Exporter bean 的内容。-->
+	<!--例如，如果使用基于 HTTP 的远程调用(注意 secureRemoteInvocationExecutor bean 的相关属性)-->
+	<!--<bean name="/someService" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">-->
+		<!--<property name="service" ref="someService"/>-->
+		<!--<property name="serviceInterface" value="com.pkg.service.SomeService"/>-->
+		<!--<property name="remoteInvocationExecutor" ref="secureRemoteInvocationExecutor"/>-->
+	<!--</bean>-->
+
+	<!--当远程调用被执行后，Subject 的识别信息必须附加到远程调用的负载上使服务器知道是谁作出了该调用。-->
+	<!--若客户端 是一个基于 Spring 的客户端，该关联是通过 Shiro 的 SecureRemoteInvocationFactory 来完成的:-->
+	<bean id="secureRemoteInvocationFactory" class="org.apache.shiro.spring.remoting.SecureRemoteInvocationFactory"/>
+
+	<!--在你定义好这个 bean 后，你需要将它插入到你正在使用的基于特定协议的 Spring remoting ProxyFactoryBean 中。 -->
+	<!--例如，如果你正在使用基于 HTTP 的远程调用(注意上面定义的 secureRemoteInvocationFactory bean 的相关属性):-->
+	<!--<bean id="someService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">-->
+		<!--<property name="serviceUrl" value="http://host:port/remoting/someService"/>-->
+		<!--<property name="serviceInterface" value="com.pkg.service.SomeService"/>-->
+		<!--<property name="remoteInvocationFactory" ref="secureRemoteInvocationFactory"/>-->
+	<!--</bean>-->
+</beans>

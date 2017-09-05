@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzy.modules.dao.RoleDao">
+
+    <sql id="roleColumns">
+        a.id,
+        a.name,
+        a.type
+    </sql>
+
+    <select id="findList" resultType="Role">
+        SELECT
+          <include refid="roleColumns"/>
+        FROM ROLE
+    </select>
+
+    <select id="get" resultType="Role">
+        SELECT
+          <include refid="roleColumns"/>
+        FROM ROLE
+    </select>
+
+
+</mapper>
