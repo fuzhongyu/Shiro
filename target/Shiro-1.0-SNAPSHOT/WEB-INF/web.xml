@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
 
-  <display-name>LogManager</display-name>
+  <display-name>Shiro</display-name>
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
@@ -36,6 +36,7 @@
     <!--拦截所有请求-->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+
 
   <!--利用过滤器对编码进行设置-->
   <filter>
@@ -73,5 +74,6 @@
       <filter-name>shiroFilter</filter-name>
       <url-pattern>/*</url-pattern>
   </filter-mapping>
+
 
 </web-app>

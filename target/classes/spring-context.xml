@@ -19,7 +19,8 @@
 	</context:component-scan>
 
 
-	<import resource="spring-mybatis.xml"/>
-	<import resource="spring-shiro.xml"/>
+	<import resource="classpath:spring-mybatis.xml"/>
+	<import resource="classpath:spring-shiro.xml"/>
+
 
 </beans>

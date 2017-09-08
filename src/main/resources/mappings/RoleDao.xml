@@ -5,19 +5,28 @@
     <sql id="roleColumns">
         a.id,
         a.name,
-        a.type
+        a.type,
+        a.permiss_json_str AS permissJsonStr
     </sql>
 
     <select id="findList" resultType="Role">
         SELECT
           <include refid="roleColumns"/>
-        FROM ROLE
+        FROM ROLE a
     </select>
 
     <select id="get" resultType="Role">
         SELECT
           <include refid="roleColumns"/>
-        FROM ROLE
+        FROM ROLE a
+    </select>
+
+    <select id="findRoleByUser" resultType="Role">
+        SELECT
+          <include refid="roleColumns"/>
+        FROM  ROLE_USER b
+        LEFT JOIN ROLE a ON a.id=b.role_id AND b.user_id=#{userId}
+        WHERE a.DELETE_FLAG='0'
     </select>
 
 

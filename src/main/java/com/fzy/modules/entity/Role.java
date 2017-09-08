@@ -1,12 +1,17 @@
 package com.fzy.modules.entity;
 
+import java.io.Serializable;
+import java.util.Set;
+
 /**
  * 角色实体类
  * Created by fuzhongyu on 2017/9/5.
  */
-public class Role {
+public class Role implements Serializable{
 
-    private Long id;
+    private static final long serialVersionUID=1L;
+
+    private String id;
 
     private String name;   //角色名称
 
@@ -14,13 +19,15 @@ public class Role {
 
     private String deleteFlag;  //删除标记， 0-正常，1-删除
 
-    private User user;
+    private String permissJsonStr;  //权限在数据库中已json存储
 
-    public Long getId() {
+    private Set<Permission> permissionSet;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -48,11 +55,19 @@ public class Role {
         this.deleteFlag = deleteFlag;
     }
 
-    public User getUser() {
-        return user;
+    public String getPermissJsonStr() {
+        return permissJsonStr;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setPermissJsonStr(String permissJsonStr) {
+        this.permissJsonStr = permissJsonStr;
+    }
+
+    public Set<Permission> getPermissionSet() {
+        return permissionSet;
+    }
+
+    public void setPermissionSet(Set<Permission> permissionSet) {
+        this.permissionSet = permissionSet;
     }
 }

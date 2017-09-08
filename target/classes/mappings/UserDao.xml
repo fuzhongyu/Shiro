@@ -12,13 +12,20 @@
     <select id="findList" resultType="User">
         SELECT
           <include refid="userColumns"/>
-        FROM USER
+        FROM USER a
     </select>
 
     <select id="get" resultType="User">
         SELECT
           <include refid="userColumns"/>
-        FROM USER
+        FROM USER a
+    </select>
+
+    <select id="getByName" resultType="User">
+        SELECT
+          <include refid="userColumns"/>
+        FROM USER a
+        WHERE a.user_name = #{userName}
     </select>
 
 

@@ -1,14 +1,18 @@
 package com.fzy.modules.entity;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户实体类
  * Created by fuzhongyu on 2017/9/4.
  */
-public class User {
+public class User implements Serializable{
 
-    private long id;
+    private static final long serialVersionUID=1L;
+
+    private String id;
 
     private String userName;  //用户名
 
@@ -18,13 +22,13 @@ public class User {
 
     private String deleteFlag;  //删除标记  0-正常，1-删除
 
-    private List<Role> roleList;  //角色列表
+    private Set<Role> roleList;  //角色集合
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -60,11 +64,11 @@ public class User {
         this.deleteFlag = deleteFlag;
     }
 
-    public List<Role> getRoleList() {
+    public Set<Role> getRoleList() {
         return roleList;
     }
 
-    public void setRoleList(List<Role> roleList) {
+    public void setRoleList(Set<Role> roleList) {
         this.roleList = roleList;
     }
 }
