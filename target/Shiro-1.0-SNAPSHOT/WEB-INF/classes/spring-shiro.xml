@@ -41,21 +41,26 @@
         <property name="unauthorizedUrl" value="/index.jsp"/>
 
 		<!-- The 'filters' property is not necessary since any declared javax.servlet.Filter bean --> <!-- defined will be automatically acquired and available via its beanName in chain --> <!-- definitions, but you can perform instance overrides or name aliases here if you like: -->
+		<!--自定义认证拦截器-->
 		<property name="filters">
 			<util:map>
 			<entry key="anAlias" value-ref="someFilter"/>
 			</util:map>
 		</property>
 		<property name="filterChainDefinitions">
+			<!--anon：不进行验证， authc:认证过， user:登录过-->
 			<value>
 				/${managerPath}/login/submitLogin = anon
-				/** = perms
+				/${managerPath}/login/out = logout
+				//${managerPath}/** = authc
 			</value>
 		</property>
 	</bean>
 
+
 	<!-- Define any javax.servlet.Filter beans you want anywhere in this application context. --> <!-- They will automatically be acquired by the 'shiroFilter' bean above and made available --> <!-- to the 'filterChainDefinitions' property. Or you can manully/explicitly add them -->
 	<!-- to the shiroFilter's 'filter' Map if desired. See its JavaDoc for more details. -->
+	<!--自定义认证拦截器-->
 	<bean id="someFilter" class="com.fzy.modules.filter.SomeThingFilter"/>
 
 

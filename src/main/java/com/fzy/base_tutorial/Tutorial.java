@@ -37,6 +37,7 @@ public class Tutorial {
         //get the currently executing user:
         Subject currentUser = SecurityUtils.getSubject();
 
+
         /**
          * session
          */

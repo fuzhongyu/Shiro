@@ -31,4 +31,17 @@ public class LoginControlelr {
 
     }
 
+
+    /**
+     * 登出
+     * @param user
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/out")
+    public ResponseResult out(@RequestBody User user){
+//        SecurityUtils.getSubject().logout();
+        return new ResponseResult(ErrMsg.SUCC_1,"登出成功");
+    }
+
 }

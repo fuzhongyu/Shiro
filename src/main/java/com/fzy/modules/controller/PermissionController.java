@@ -15,7 +15,7 @@ import java.util.List;
  * Created by fuzhongyu on 2017/9/7.
  */
 @Controller
-@RequestMapping("permission")
+@RequestMapping("${managerPath}/permission")
 public class PermissionController {
 
     @Autowired

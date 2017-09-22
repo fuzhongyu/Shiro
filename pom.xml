@@ -64,8 +64,8 @@
     <!-- Shiro use SLF4J for logging. We'll use the 'simple' binding in this example app. See http://ww.slf4j.org for more info. -->
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.6.1</version>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.12</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/log4j/log4j -->
@@ -73,6 +73,12 @@
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.15</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.7.21</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
